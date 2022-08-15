@@ -1,29 +1,52 @@
+
 let params = (new URL(document.location)).searchParams;
 let id = params.get('id');
-console.log(id);
 
 
 const url = 'http://localhost:3000/api/products';
+const description = document.getElementById('description');
+const title = document.getElementById('title');
+const price = document.getElementById('price');
+const img = document.getElementsByClassName('item__img');
+let color = document.getElementById('colors');
 
+fetch(url)
 
-
-
-let product_sheet = fetch('http://localhost:3000/api/products')
-.then(function(response){
+  .then(function (response) {
     return response.json()
-})
-.then(function(data){
+  })
 
-    function afficheDatas(data) {
-        data.map(function(produit) {
-       
-            if (produit._id==id)
-            
-       
-          {  console.log(produit.name)}
-        });
-      }
+  .then(function (item) 
+  {
 
-afficheDatas(data);
-});
+    function showItems(items) {
 
+      items.map(function (item) {
+
+       if (item._id === id) 
+        {
+        title.innerHTML = item.name;    
+        description.innerHTML = item.description;
+        price.innerHTML = item.price;
+        img[0].innerHTML = `<img src=${item.imageUrl} >`;
+         
+        for (i = 0 ; i<item.colors.length; i++){
+          color.innerHTML += `<option value="${item.colors[i]}" >${item.colors[i]}</option>`
+        }
+        
+
+
+      
+        }
+
+      });  
+     }
+
+    showItems(item);
+     
+   })
+  
+  .catch(function(error) {
+      console.log(error);
+  })
+ 
