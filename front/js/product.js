@@ -9,7 +9,7 @@ const price = document.getElementById('price');
 const img = document.getElementsByClassName('item__img');
 const color = document.getElementById('colors');
 const addToCart = document.getElementById('addToCart')
-const quantity = document.getElementById("quantity")
+let quantity = document.getElementById("quantity")
 
 
 fetch(url)
@@ -52,6 +52,7 @@ function saveBasket(basket) {
   localStorage.setItem("item", JSON.stringify(basket));
 }
 
+/*
 function addBasket(product) {
   let basket = getBasket();
   let foundProduct = basket.find((p => p.id == product.id) && (p => p.color == product.color));
@@ -64,7 +65,7 @@ function addBasket(product) {
 
   saveBasket(basket);
 }
-
+*/
 
 addToCart.addEventListener("click", function () {
   let basket = getBasket();
@@ -75,7 +76,11 @@ addToCart.addEventListener("click", function () {
   }
   let foundProduct = basket.find((p => p.id == product.id) && (p => p.color == product.color));
   if (foundProduct != undefined) {
-  foundProduct.quantity += quantity.value
+  
+    let un = parseInt(product.quantity);
+    let deux = parseInt(foundProduct.quantity);
+un + deux; // ne change rien
+    console.log(un + deux); // affiche la bonne valeur
 
   } else {
     product.quantity = quantity.value;
