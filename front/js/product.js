@@ -2,7 +2,7 @@ let params = (new URL(document.location)).searchParams;
 let id = params.get('id');
 
 
-const url = 'http://localhost:3000/api/products';
+const url = 'http://localhost:3000/api/products/'+id;
 const description = document.getElementById('description');
 const title = document.getElementById('title');
 const price = document.getElementById('price');
@@ -19,10 +19,7 @@ fetch(url)
   })
 
   .then(function (item) {
-    function showItems(items) {
-      items.map(function (item) {
-
-        if (item._id === id) {
+    function showItem(item) {
 
           title.innerHTML = item.name;
           description.innerHTML = item.description;
@@ -31,23 +28,49 @@ fetch(url)
 
           for (i = 0; i < item.colors.length; i++) {
             color.innerHTML += `<option value="${item.colors[i]}" >${item.colors[i]}</option>`
-          }
-
-          function addToLocalStorage() {
-            localStorage.id = id;
-            localStorage.quantity = quantity.value;
-            localStorage.colors = color.value;
-
-          }
-
-          addToCart.addEventListener('click', addToLocalStorage)
-
+        }       
         }
-      });
-    }
-    showItems(item);
+  
+    showItem(item);
   })
 
   .catch(function (error) {
     console.log(error);
   })
+   
+
+function getBasket(){
+  let basket = localStorage.getItem("item");
+  if(basket == null){
+    return [];
+  }else{
+    return JSON.parse(basket);
+  }
+}
+
+function saveBasket(basket){
+  localStorage.setItem("item",JSON.stringify(basket));
+}
+
+function addBasket(product){
+let basket=getBasket();
+let foundProduct = basket.find(p => p.id == product.id);
+if (foundProduct != undefined) {
+  foundProduct.quantity++;
+}else{
+  product.quantity = 1;
+  basket.push(product);
+}
+
+saveBasket(basket);
+}
+
+
+addToCart.addEventListener("click", function() {let basket=getBasket();
+  basket.push({"id":id,"color":color.value, "quantity": quantity.value});
+  saveBasket(basket);
+  
+});
+
+
+ 
