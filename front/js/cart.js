@@ -4,7 +4,6 @@ let item = JSON.parse(localStorage.getItem("item"));
 
 const cartItems = document.getElementById('cart__items');
 let id = item[0].id
-let price = item[0].price
 let color = item[0].color
 let quantity = item[0].quantity
 
@@ -17,10 +16,7 @@ fetch(url)
   })
 
   .then(function (item) {
-    function showItems (item) {
-      price = item.price;
  
-    }
 cartItems.innerHTML = `<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
     <div class="cart__item__img">
         <img src=${item.imageUrl} alt="Photographie d'un canapé">
@@ -29,7 +25,7 @@ cartItems.innerHTML = `<article class="cart__item" data-id="{product-ID}" data-c
         <div class="cart__item__content__description">
             <h2>${item.name}</h2>
             <p>${color}</p>
-            <p>${item.price} €</p>
+            <p>${item.price*quantity} €</p>
             </div>
         <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
@@ -43,7 +39,7 @@ cartItems.innerHTML = `<article class="cart__item" data-id="{product-ID}" data-c
     </div>
 </article>`
 
-showItems(item)
+
 })
 
 
