@@ -52,21 +52,6 @@ function saveBasket(basket) {
   localStorage.setItem("item", JSON.stringify(basket));
 }
 
-/*
-function addBasket(product) {
-  let basket = getBasket();
-  let foundProduct = basket.find((p => p.id == product.id) && (p => p.color == product.color));
-  if (foundProduct != undefined) {
-    foundProduct.quantity++;
-  } else {
-    product.quantity = 1;
-    basket.push(product);
-  }
-
-  saveBasket(basket);
-}
-*/
-
 addToCart.addEventListener("click", function () {
   let basket = getBasket();
   let product = {
