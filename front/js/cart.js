@@ -39,10 +39,12 @@ cartItems.innerHTML += `<article class="cart__item" data-id="{product-ID}" data-
         </div>
     </div>
 </article>`
-  
-
-
-
+console.log(item.length)
+let totalPrice=0
+for (i=0; i<item.length; i++){
+    totalPrice+= Number(item[i].quantity);
+console.log(item.length)
+}
 })
 }
 
