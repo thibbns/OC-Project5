@@ -1,12 +1,13 @@
 
 let item = JSON.parse(localStorage.getItem("item"));
-
-
 const cartItems = document.getElementById('cart__items');
-let id = item[0].id
-let color = item[0].color
-let quantity = item[0].quantity
 
+
+for (i=0; i<item.length ; i++){
+let id = item[i].id
+let color = item[i].color
+let quantity = item[i].quantity
+console.log(item[i])
 const url = 'http://localhost:3000/api/products/' + id;
 
 fetch(url)
@@ -17,7 +18,7 @@ fetch(url)
 
   .then(function (item) {
  
-cartItems.innerHTML = `<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+cartItems.innerHTML += `<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
     <div class="cart__item__img">
         <img src=${item.imageUrl} alt="Photographie d'un canapé">
     </div>
@@ -25,7 +26,7 @@ cartItems.innerHTML = `<article class="cart__item" data-id="{product-ID}" data-c
         <div class="cart__item__content__description">
             <h2>${item.name}</h2>
             <p>${color}</p>
-            <p>${item.price*quantity} €</p>
+            <p>${item.price} €</p>
             </div>
         <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
@@ -38,14 +39,20 @@ cartItems.innerHTML = `<article class="cart__item" data-id="{product-ID}" data-c
         </div>
     </div>
 </article>`
+  
+
 
 
 })
+}
+
+let totalQuantity=0
+for (i=0; i<item.length; i++){
+    totalQuantity+= Number(item[i].quantity);
+
+    document.getElementById('totalQuantity').innerHTML = totalQuantity
+}
 
 
 
-console.log(item[1].id)
-console.log(item[1].color)
-console.log(item[1].quantity)
-console.log(item.price)
 
