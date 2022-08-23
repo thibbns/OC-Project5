@@ -59,12 +59,13 @@ addToCart.addEventListener("click", function () {
     "color": color.value,
     "quantity": quantity.value
   }
+  
   let foundProduct = basket.find((p => p.id == product.id) && (p => p.color == product.color));
   if (foundProduct != undefined) {
   
     let un = parseInt(product.quantity);
     let deux = parseInt(foundProduct.quantity);
-un + deux; // ne change rien
+    un + deux; // ne change rien
     console.log(un + deux); // affiche la bonne valeur
 
   } else {
