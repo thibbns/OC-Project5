@@ -1,14 +1,14 @@
 let items = JSON.parse(localStorage.getItem("items"));
 
 const cartItems = document.getElementById('cart__items');
-
+const removeFromCart = document.getElementsByClassName('deleteItem');
 
 for (i = 0; i < items.length; i++) {
   let id = items[i].id
   let color = items[i].color
   let quantity = items[i].quantity
 
-  
+
   const url = 'http://localhost:3000/api/products/' + id;
   fetch(url)
 
@@ -18,8 +18,8 @@ for (i = 0; i < items.length; i++) {
 
     .then(function (data) {
 
-        console.log(id)
-        cartItems.innerHTML += `<article class="cart__item" data-id="${items.id}" data-color="${color}">
+      console.log(id)
+      cartItems.innerHTML += `<article class="cart__item" data-id="${items.id}" data-color="${color}">
     <div class="cart__item__img">
         <img src=${data.imageUrl} alt="Photographie d'un canapé">
     </div>
@@ -40,43 +40,87 @@ for (i = 0; i < items.length; i++) {
         </div>
     </div>
 </article>`
-        console.log(items)
-      });
-
-      console.log(items)
-
-
-      //localStorage.removeItem({id:'415b7cacb65d43b2b5c1ff70f3393ad1'})
-
-      function getBasket() {
-        let basket = localStorage.getItem("items");
-        if (basket == null) {
-          return [];
-        } else {
-          return JSON.parse(basket);
-        }
-      }
+ 
+    
+    
+for (let i = 0; i < removeFromCart.length; i++) {
+  removeFromCart[i].addEventListener("click", function () {
+   removeFromStorage(items[i]);
+  })
+}
+    
+    
+    
+    });
 
 
 
 
-      function removeFromStorage(product) {
-        let basket = getBasket();
-        basket = basket.filter(p=> p.id != product.id);
-        saveBasket(basket); 
-      }
+  //localStorage.removeItem({id:'415b7cacb65d43b2b5c1ff70f3393ad1'})
 
-      function saveBasket(basket) {
-        localStorage.setItem("items", JSON.stringify(basket));
-      }
+  function getBasket() {
+    let basket = localStorage.getItem("items");
+    if (basket == null) {
+      return [];
+    } else {
+      return JSON.parse(basket);
+    }
+  }
+
+  function removeFromStorage(product) {
+    let basket = getBasket();
+    basket = basket.filter(p => p.id != product.id);
+    saveBasket(basket);
+  }
+
+  function saveBasket(basket) {
+    localStorage.setItem("items", JSON.stringify(basket));
+  }
+
+ 
+
+
+
+ 
+console.log(removeFromCart.length)
+}
 
 
 
 
-removeFromStorage({id:"107fb5b75607497b96722bda5b504926"})
+//removeFromStorage({id:"107fb5b75607497b96722bda5b504926"})
 
 
-      /*function removeItems("415b7cacb65d43b2b5c1ff70f3393ad1") {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*function removeItems("415b7cacb65d43b2b5c1ff70f3393ad1") {
         const removeFromCart = document.querySelector('.deleteItem')
         localStorage.removeItem("415b7cacb65d43b2b5c1ff70f3393ad1")
       }
@@ -121,21 +165,21 @@ removeItems
 
 
 
-  //const removeFromCart = document.getElementsByClassName('deleteItem');
+//const removeFromCart = document.getElementsByClassName('deleteItem');
 
 
 
-  //removeFromStorage.addEventListener("click", removeFromCart([{id:"415b7cacb65d43b2b5c1ff70f3393ad1"}]));
-
-
-
-
+//removeFromStorage.addEventListener("click", removeFromCart([{id:"415b7cacb65d43b2b5c1ff70f3393ad1"}]));
 
 
 
 
 
-}
+
+
+
+
+
 
 
 let totalPrice = 0
