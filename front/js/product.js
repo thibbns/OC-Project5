@@ -40,7 +40,7 @@ fetch(url)
 
 
 function getBasket() {
-  let basket = localStorage.getItem("item");
+  let basket = localStorage.getItem("items");
   if (basket == null) {
     return [];
   } else {
@@ -49,7 +49,7 @@ function getBasket() {
 }
 
 function saveBasket(basket) {
-  localStorage.setItem("item", JSON.stringify(basket));
+  localStorage.setItem("items", JSON.stringify(basket));
 }
 
 addToCart.addEventListener("click", function () {
