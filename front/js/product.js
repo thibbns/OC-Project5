@@ -65,8 +65,8 @@ addToCart.addEventListener("click", function () {
   
     let un = parseInt(product.quantity);
     let deux = parseInt(foundProduct.quantity);
-    un + deux; // ne change rien
-    console.log(un + deux); // affiche la bonne valeur
+    un;  // ne change rien
+    console.log(un); // affiche la bonne valeur
 
   } else {
     product.quantity = quantity.value;
