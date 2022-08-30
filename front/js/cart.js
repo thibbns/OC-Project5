@@ -18,8 +18,8 @@ for (i = 0; i < items.length; i++) {
 
     .then(function (data) {
 
-      console.log(id)
-      cartItems.innerHTML += `<article class="cart__item" data-id="${items.id}" data-color="${color}">
+
+      cartItems.innerHTML += `<article class="cart__item" data-id="${id}" data-color="${color}">
     <div class="cart__item__img">
         <img src=${data.imageUrl} alt="Photographie d'un canapé">
     </div>
@@ -40,50 +40,142 @@ for (i = 0; i < items.length; i++) {
         </div>
     </div>
 </article>`
+
+
+
+
+      //let itemToDelete = 
+
+      /*
+              deleteItem.addEventListener("click", function () {
+
+             removeFromStorage({
+                id: 'id'
+              })
+              removeArticleHtml.parentNode.removeChild(removeArticleHtml)
+              })
+
+              })
+
+              const deleteItem = document.querySelector('[data-id="' + id + '"] .deleteItem')
+              const removeArticleHtml = deleteItem.closest('article');
+
+
+
+              console.log(deleteItem)
+      
+
+
+      const deleteItem = document.querySelector('.deleteItem')
+
+      const articleId = document.querySelector('[data-id="' + id + '"]')
+
+
+      const article = articleId.closest('article')
+
+      console.log(article)
+*/
+
+
+
+   
+
+
+  for (let i = 0; i < removeFromCart.length; i++) {
+
+
+    removeFromCart[i].addEventListener("click", function () {
+
+      removeFromStorage(items[i]);
+
+      let removeArticleHtml = removeFromCart[i].closest('article');
+
+      if (removeArticleHtml.parentNode) {
+        removeArticleHtml.parentNode.removeChild(removeArticleHtml);
+
  
-    
-    
-for (let i = 0; i < removeFromCart.length; i++) {
-  removeFromCart[i].addEventListener("click", function () {
-   removeFromStorage(items[i]);
-  })
+
+      }
+    })
+  }
+
+ });
+
 }
-    
-    
-    
-    });
 
 
 
 
-  //localStorage.removeItem({id:'415b7cacb65d43b2b5c1ff70f3393ad1'})
 
-  function getBasket() {
-    let basket = localStorage.getItem("items");
-    if (basket == null) {
-      return [];
-    } else {
-      return JSON.parse(basket);
-    }
+
+/*
+
+ for (let i = 0; i < removeFromCart.length; i++) {
+    removeFromCart[i].addEventListener("click", function () {
+      removeFromStorage(items[i]);
+      let removeArticleHtml = removeFromCart[i].closest('article');
+
+      if (removeArticleHtml.parentNode) {
+        removeArticleHtml.parentNode.removeChild(removeArticleHtml);
+      
+      }
+    })
   }
 
-  function removeFromStorage(product) {
-    let basket = getBasket();
-    basket = basket.filter(p => p.id != product.id);
-    saveBasket(basket);
+
+
+
+
+
+        for (let i = 0; i < removeFromCart.length; i++) {
+          removeFromCart[i].addEventListener("click", function () {
+            removeFromStorage(items[i]);
+            let removeArticleHtml = document.querySelector('[data-id="'+items[i].id+'"]');
+         
+            if (removeArticleHtml.parentNode) {
+              removeArticleHtml.parentNode.removeChild(removeArticleHtml);
+            }
+          })
+        }
+
+
+
+
+         */
+
+
+
+
+
+
+//localStorage.removeItem({id:'415b7cacb65d43b2b5c1ff70f3393ad1'})
+
+function getBasket() {
+  let basket = localStorage.getItem("items");
+  if (basket == null) {
+    return [];
+  } else {
+    return JSON.parse(basket);
   }
-
-  function saveBasket(basket) {
-    localStorage.setItem("items", JSON.stringify(basket));
-  }
-
- 
-
-
-
- 
-console.log(removeFromCart.length)
 }
+
+function removeFromStorage(product) {
+  let basket = getBasket();
+  basket = basket.filter(p => p.id != product.id);
+  saveBasket(basket);
+}
+
+function saveBasket(basket) {
+  localStorage.setItem("items", JSON.stringify(basket));
+}
+
+
+
+
+
+
+
+
 
 
 
