@@ -10,8 +10,7 @@ function displayBasket() {
     let id = items[i].id
     let color = items[i].color
     let quantity = Number(items[i].quantity);
-    console.log(items[i].id)
-    console.log(quantity)
+
     const url = 'http://localhost:3000/api/products/' + id;
     fetch(url)
 
@@ -71,6 +70,18 @@ function displayBasket() {
           saveBasket(basket);
         }
 
+
+
+        const selectElement = document.querySelector('.cart__item');
+
+
+        selectElement.addEventListener('change', (event) => {
+          console.log(event.target.value)
+
+          const closest = selectElement.closest('article')
+
+          console.log(closest.dataset.id)
+        })
 
 
 
