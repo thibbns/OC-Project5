@@ -9,8 +9,9 @@ function displayBasket() {
   for (i = 0; i < items.length; i++) {
     let id = items[i].id
     let color = items[i].color
-    let quantity = items[i].quantity
-
+    let quantity = Number(items[i].quantity);
+    console.log(items[i].id)
+    console.log(quantity)
     const url = 'http://localhost:3000/api/products/' + id;
     fetch(url)
 
@@ -29,7 +30,7 @@ function displayBasket() {
           <div class="cart__item__content__description">
               <h2>${data.name}</h2>
               <p>${color}</p>
-              <p>${data.price*quantity} €</p>
+              <p>${data.price} €</p>
               </div>
           <div class="cart__item__content__settings">
               <div class="cart__item__content__settings__quantity">
@@ -57,6 +58,26 @@ function displayBasket() {
         function saveBasket(basket) {
           localStorage.setItem("items", JSON.stringify(basket));
         }
+
+
+        function changeQuantity(product, quantity) {
+          let basket = getBasket();
+          let foundProduct = basket.find(p => p.id == product.id);
+          if (foundProduct != undefined) {
+            let foundProductQuantityNumber = Number(foundProduct.quantity)
+            foundProductQuantityNumber += quantity;
+            foundProduct.quantity = foundProductQuantityNumber
+          }
+          saveBasket(basket);
+        }
+
+
+
+
+
+
+
+
 
         function removeFromStorage(product) {
           let basket = getBasket();
@@ -86,7 +107,7 @@ function displayBasket() {
 
         totalPrice += quantity * data.price;
         document.getElementById('totalPrice').innerHTML = totalPrice
-     
+
 
       });
 
