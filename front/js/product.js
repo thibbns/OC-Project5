@@ -52,6 +52,7 @@ function saveCart(cart) {
   localStorage.setItem("items", JSON.stringify(cart));
 }
 
+
 addToCart.addEventListener("click", function () {
   let cart = getCart();
   let product = {
@@ -61,13 +62,15 @@ addToCart.addEventListener("click", function () {
   }
   
   let foundProduct = cart.find((p => p.id == product.id) && (p => p.color == product.color));
-  if (foundProduct != undefined) {
-  
+  if ((color.value == "") || (quantity.value == 0)) {
+alert('Veuillez sélectionner une couleur et indiquer une quantité entre 0 et 100')
+  } else if (foundProduct != undefined){
+    
   } else {
     product.quantity = quantity.value;
 
     cart.push(product);
+   
   }
-  saveCart(cart);
-
+saveCart(cart);
 });

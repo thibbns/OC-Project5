@@ -20,7 +20,7 @@ function displayCart() {
 
       .then(function (data) {
 
-
+// AJOUT DE L'ARTICLE DANS LE HTML
         cartItems.innerHTML += `<article class="cart__item" data-id="${id}" data-color="${color}">
       <div class="cart__item__img">
           <img src=${data.imageUrl} alt="Photographie d'un canapé">
@@ -44,7 +44,7 @@ function displayCart() {
   </article>`
 
 
-
+// RECUPERATION DU LOCAL STORAGE
         function getCart() {
           let cart = localStorage.getItem("items");
           if (cart == null) {
@@ -54,11 +54,12 @@ function displayCart() {
           }
         }
 
+// MISE A JOUR DU LOCAL STORAGE
         function saveCart(cart) {
           localStorage.setItem("items", JSON.stringify(cart));
         }
 
-
+// CHANGER LA QUANTITE D'UN ARTICLE ET SUPPRESSION SI QUANTITE NULLE
         function changeQuantity(product, quantity) {
           let cart = getCart();
           let foundProduct = cart.find((p => p.id == product.id)&&(p => p.color == product.color));
@@ -66,61 +67,63 @@ function displayCart() {
             let foundProductQuantityNumber = Number(foundProduct.quantity)
             foundProductQuantityNumber = quantity;
             foundProduct.quantity = foundProductQuantityNumber
+            if (foundProduct.quantity<=0){
+              removeFromStorage(foundProduct)
+            }else{
+              saveCart(cart)
+            }
+            }
           }
-          saveCart(cart);
-        }
-
-
+        
 
         const selectElement = document.querySelectorAll('article');
-
         for (let i = 0; i < selectElement.length; i++) {
-
           selectElement[i].addEventListener('change', (event) => {
-
+            
             let newQuantity = Number(event.target.value)
             const closest = selectElement[i].closest('article')
             let changeId = closest.dataset.id
             let changeColor = closest.dataset.color
-            changeQuantity({id: changeId, color: changeColor}, newQuantity)
-
+            if(newQuantity<100){
+              changeQuantity({id: changeId, color: changeColor}, newQuantity)
+             
+            }else{
+              alert('La quantité maximale est 100, Veuillez sélectionner une quantité entre 0 et 100')
+            }
+            
           })
         }
 
-
-
-
-
-
+//SUPPRIMER UN ARTICLE
         function removeFromStorage(product) {
           let cart = getCart();
           cart = cart.filter((p => p.id != product.id)&&(p => p.color != product.color));
           saveCart(cart);
           displayCart();
+          
         }
 
         const removeFromCart = document.getElementsByClassName('deleteItem');
-
         for (let i = 0; i < removeFromCart.length; i++) {
-
           removeFromCart[i].addEventListener("click", function () {
             removeFromStorage(items[i]);
-
+            
           })
         }
 
-
+// CALCUL QUANTITE TOTALE
         let totalQuantity = 0;
         for (i = 0; i < items.length; i++) {
           totalQuantity += Number(items[i].quantity);
-
           document.getElementById('totalQuantity').innerHTML = totalQuantity
         }
 
-
+// CALCUL DU PRIX TOTAL
+        
         totalPrice += quantity * data.price;
         document.getElementById('totalPrice').innerHTML = totalPrice
-
+        
+//
 
       });
 
