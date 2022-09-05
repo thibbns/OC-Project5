@@ -1,10 +1,10 @@
-displayBasket();
+displayCart();
 
-function displayBasket() {
+function displayCart() {
   let items = JSON.parse(localStorage.getItem("items"));
   const cartItems = document.getElementById('cart__items');
   cartItems.innerHTML = "";
-  let totalPrice = 0;
+  totalPrice = 0;
 
   for (i = 0; i < items.length; i++) {
     let id = items[i].id
@@ -45,45 +45,47 @@ function displayBasket() {
 
 
 
-        function getBasket() {
-          let basket = localStorage.getItem("items");
-          if (basket == null) {
+        function getCart() {
+          let cart = localStorage.getItem("items");
+          if (cart == null) {
             return [];
           } else {
-            return JSON.parse(basket);
+            return JSON.parse(cart);
           }
         }
 
-        function saveBasket(basket) {
-          localStorage.setItem("items", JSON.stringify(basket));
+        function saveCart(cart) {
+          localStorage.setItem("items", JSON.stringify(cart));
         }
 
 
         function changeQuantity(product, quantity) {
-          let basket = getBasket();
-          let foundProduct = basket.find(p => p.id == product.id);
+          let cart = getCart();
+          let foundProduct = cart.find((p => p.id == product.id)&&(p => p.color == product.color));
           if (foundProduct != undefined) {
             let foundProductQuantityNumber = Number(foundProduct.quantity)
-            foundProductQuantityNumber += quantity;
+            foundProductQuantityNumber = quantity;
             foundProduct.quantity = foundProductQuantityNumber
           }
-          saveBasket(basket);
+          saveCart(cart);
         }
 
 
 
-        const selectElement = document.querySelector('.cart__item');
+        const selectElement = document.querySelectorAll('article');
 
+        for (let i = 0; i < selectElement.length; i++) {
 
-        selectElement.addEventListener('change', (event) => {
-          console.log(event.target.value)
+          selectElement[i].addEventListener('change', (event) => {
 
-          const closest = selectElement.closest('article')
+            let newQuantity = Number(event.target.value)
+            const closest = selectElement[i].closest('article')
+            let changeId = closest.dataset.id
+            let changeColor = closest.dataset.color
+            changeQuantity({id: changeId, color: changeColor}, newQuantity)
 
-          console.log(closest.dataset.id)
-        })
-
-
+          })
+        }
 
 
 
@@ -91,10 +93,10 @@ function displayBasket() {
 
 
         function removeFromStorage(product) {
-          let basket = getBasket();
-          basket = basket.filter(p => p.id != product.id);
-          saveBasket(basket);
-          displayBasket();
+          let cart = getCart();
+          cart = cart.filter((p => p.id != product.id)&&(p => p.color != product.color));
+          saveCart(cart);
+          displayCart();
         }
 
         const removeFromCart = document.getElementsByClassName('deleteItem');
@@ -123,4 +125,5 @@ function displayBasket() {
       });
 
   }
+
 }

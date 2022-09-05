@@ -39,40 +39,35 @@ fetch(url)
   })
 
 
-function getBasket() {
-  let basket = localStorage.getItem("items");
-  if (basket == null) {
+function getCart() {
+  let cart = localStorage.getItem("items");
+  if (cart == null) {
     return [];
   } else {
-    return JSON.parse(basket);
+    return JSON.parse(cart);
   }
 }
 
-function saveBasket(basket) {
-  localStorage.setItem("items", JSON.stringify(basket));
+function saveCart(cart) {
+  localStorage.setItem("items", JSON.stringify(cart));
 }
 
 addToCart.addEventListener("click", function () {
-  let basket = getBasket();
+  let cart = getCart();
   let product = {
     "id": id,
     "color": color.value,
     "quantity": quantity.value
   }
   
-  let foundProduct = basket.find((p => p.id == product.id) && (p => p.color == product.color));
+  let foundProduct = cart.find((p => p.id == product.id) && (p => p.color == product.color));
   if (foundProduct != undefined) {
   
-    let un = parseInt(product.quantity);
-    let deux = parseInt(foundProduct.quantity);
-    un;  // ne change rien
-    console.log(un); // affiche la bonne valeur
-
   } else {
     product.quantity = quantity.value;
 
-    basket.push(product);
+    cart.push(product);
   }
-  saveBasket(basket);
+  saveCart(cart);
 
 });
