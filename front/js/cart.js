@@ -125,6 +125,27 @@ function displayCart() {
         
 //
 
+
+
+//REGEX
+const prenom = document.getElementById('firstName');
+        
+let testTextValide = "lksdjhdj";
+let testTextInvalide = "kjhc2kshkk"
+let regexPrenom = /^[a-zA-Z- éè]{2,25}$/;
+
+function validateInput (input, regex) {
+  if (input.match(regex)){console.log("valide")}
+  else {console.log("invalide")}
+}
+validateInput(testTextValide,regexPrenom);
+validateInput(testTextInvalide,regexPrenom);
+
+
+
+
+
+
       });
 
   }
