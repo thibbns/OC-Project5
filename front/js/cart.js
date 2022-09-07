@@ -1,3 +1,4 @@
+
 displayCart();
 
 function displayCart() {
@@ -107,7 +108,7 @@ function displayCart() {
         for (let i = 0; i < removeFromCart.length; i++) {
           removeFromCart[i].addEventListener("click", function () {
             removeFromStorage(items[i]);
-            
+        
           })
         }
 
@@ -127,19 +128,11 @@ function displayCart() {
 
 
 
-//REGEX
-const prenom = document.getElementById('firstName');
-        
-let testTextValide = "lksdjhdj";
-let testTextInvalide = "kjhc2kshkk"
-let regexPrenom = /^[a-zA-Z- éè]{2,25}$/;
 
-function validateInput (input, regex) {
-  if (input.match(regex)){console.log("valide")}
-  else {console.log("invalide")}
-}
-validateInput(testTextValide,regexPrenom);
-validateInput(testTextInvalide,regexPrenom);
+
+
+
+
 
 
 
@@ -149,5 +142,66 @@ validateInput(testTextInvalide,regexPrenom);
       });
 
   }
+
+//REGEX
+
+        
+let testTextValide = "lksdjhdj";
+let testTextInvalide = "kjhc2kshkk"
+
+
+
+let regexVille = /^[^0-9]+$/;
+
+
+
+
+function validateInput (input, regex) {
+  if (input.match(regex)){return true}
+  else {return false}
+}
+ const prenom = document.getElementById('firstName')
+let regexPrenom = /^[a-zA-Z- éè]{2,25}$/;
+const prenomError = document.getElementById('firstNameErrorMsg')
+
+const nom = document.getElementById('lastName')
+let regexNom = /^[a-zA-Z- éè]{2,25}$/;
+const nomError = document.getElementById('lastNameErrorMsg')
+
+  const mail = document.getElementById('email')
+let regexMail = /^[a-zA-Z0-9-_]+@[a-zA-Z0-9-_]+.[a-z]{2,4}$/;
+ const emailError = document.getElementById('emailErrorMsg')
+
+ 
+prenom.addEventListener("change", (event) => {
+  let input = event.target.value 
+   
+if (validateInput((input),regexPrenom)== false)
+   {prenomError.innerHTML = `format invalide`}
+  else {prenomError.innerHTML = ``}})
+
+  
+  nom.addEventListener("change", (event) => {
+     let input = event.target.value 
+     
+  if (validateInput((input),regexPrenom)== false)
+     {nomError.innerHTML = `format invalide`}
+    else {nomError.innerHTML = ``}})
+
+
+
+  mail.addEventListener("change", (event) => {
+     let input = event.target.value 
+    
+  if (validateInput((input),regexMail)== false)
+     {emailError.innerHTML = `format invalide`}
+    else {emailError.innerHTML = ``}
+  
+  })
+
+
+
+
+
 
 }
