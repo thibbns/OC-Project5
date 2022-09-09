@@ -1,4 +1,3 @@
-
 displayCart();
 
 function displayCart() {
@@ -21,7 +20,7 @@ function displayCart() {
 
       .then(function (data) {
 
-// AJOUT DE L'ARTICLE DANS LE HTML
+        // AJOUT DE L'ARTICLE DANS LE HTML
         cartItems.innerHTML += `<article class="cart__item" data-id="${id}" data-color="${color}">
       <div class="cart__item__img">
           <img src=${data.imageUrl} alt="Photographie d'un canapé">
@@ -45,7 +44,7 @@ function displayCart() {
   </article>`
 
 
-// RECUPERATION DU LOCAL STORAGE
+        // RECUPERATION DU LOCAL STORAGE
         function getCart() {
           let cart = localStorage.getItem("items");
           if (cart == null) {
@@ -55,76 +54,79 @@ function displayCart() {
           }
         }
 
-// MISE A JOUR DU LOCAL STORAGE
+        // MISE A JOUR DU LOCAL STORAGE
         function saveCart(cart) {
           localStorage.setItem("items", JSON.stringify(cart));
         }
 
-// CHANGER LA QUANTITE D'UN ARTICLE ET SUPPRESSION SI QUANTITE NULLE
+        // CHANGER LA QUANTITE D'UN ARTICLE ET SUPPRESSION SI QUANTITE NULLE
         function changeQuantity(product, quantity) {
           let cart = getCart();
-          let foundProduct = cart.find((p => p.id == product.id)&&(p => p.color == product.color));
+          let foundProduct = cart.find((p => p.id == product.id) && (p => p.color == product.color));
           if (foundProduct != undefined) {
             let foundProductQuantityNumber = Number(foundProduct.quantity)
             foundProductQuantityNumber = quantity;
             foundProduct.quantity = foundProductQuantityNumber
-            if (foundProduct.quantity<=0){
+            if (foundProduct.quantity <= 0) {
               removeFromStorage(foundProduct)
-            }else{
+            } else {
               saveCart(cart)
             }
-            }
           }
-        
+        }
+
 
         const selectElement = document.querySelectorAll('article');
         for (let i = 0; i < selectElement.length; i++) {
           selectElement[i].addEventListener('change', (event) => {
-            
+
             let newQuantity = Number(event.target.value)
             const closest = selectElement[i].closest('article')
             let changeId = closest.dataset.id
             let changeColor = closest.dataset.color
-            if(newQuantity<100){
-              changeQuantity({id: changeId, color: changeColor}, newQuantity)
-             
-            }else{
+            if (newQuantity < 100) {
+              changeQuantity({
+                id: changeId,
+                color: changeColor
+              }, newQuantity)
+
+            } else {
               alert('La quantité maximale est 100, Veuillez sélectionner une quantité entre 0 et 100')
             }
-            
+
           })
         }
 
-//SUPPRIMER UN ARTICLE
+        //SUPPRIMER UN ARTICLE
         function removeFromStorage(product) {
           let cart = getCart();
-          cart = cart.filter((p => p.id != product.id)&&(p => p.color != product.color));
+          cart = cart.filter((p => p.id != product.id) && (p => p.color != product.color));
           saveCart(cart);
           displayCart();
-          
+
         }
 
         const removeFromCart = document.getElementsByClassName('deleteItem');
         for (let i = 0; i < removeFromCart.length; i++) {
           removeFromCart[i].addEventListener("click", function () {
             removeFromStorage(items[i]);
-        
+
           })
         }
 
-// CALCUL QUANTITE TOTALE
+        // CALCUL QUANTITE TOTALE
         let totalQuantity = 0;
         for (i = 0; i < items.length; i++) {
           totalQuantity += Number(items[i].quantity);
           document.getElementById('totalQuantity').innerHTML = totalQuantity
         }
 
-// CALCUL DU PRIX TOTAL
-        
+        // CALCUL DU PRIX TOTAL
+
         totalPrice += quantity * data.price;
         document.getElementById('totalPrice').innerHTML = totalPrice
-        
-//
+
+        //
 
 
 
@@ -143,60 +145,74 @@ function displayCart() {
 
   }
 
-//REGEX
-
-        
-let testTextValide = "lksdjhdj";
-let testTextInvalide = "kjhc2kshkk"
-
-
-
-let regexVille = /^[^0-9]+$/;
+  //REGEX
 
 
 
 
-function validateInput (input, regex) {
-  if (input.match(regex)){return true}
-  else {return false}
-}
- const prenom = document.getElementById('firstName')
-let regexPrenom = /^[a-zA-Z- éè]{2,25}$/;
-const prenomError = document.getElementById('firstNameErrorMsg')
 
-const nom = document.getElementById('lastName')
-let regexNom = /^[a-zA-Z- éè]{2,25}$/;
-const nomError = document.getElementById('lastNameErrorMsg')
-
-  const mail = document.getElementById('email')
-let regexMail = /^[a-zA-Z0-9-_]+@[a-zA-Z0-9-_]+.[a-z]{2,4}$/;
- const emailError = document.getElementById('emailErrorMsg')
-
- 
-prenom.addEventListener("change", (event) => {
-  let input = event.target.value 
-   
-if (validateInput((input),regexPrenom)== false)
-   {prenomError.innerHTML = `format invalide`}
-  else {prenomError.innerHTML = ``}})
-
-  
-  nom.addEventListener("change", (event) => {
-     let input = event.target.value 
-     
-  if (validateInput((input),regexPrenom)== false)
-     {nomError.innerHTML = `format invalide`}
-    else {nomError.innerHTML = ``}})
+  function validateInput(input, regex) {
+    if (input.match(regex)) {
+      return true
+    } else {
+      return false
+    }
+  }
 
 
+  const firstName = document.getElementById('firstName')
+  let regexFirstName = /^[a-zA-Z- éè]{2,25}$/;
+  const FirstNameError = document.getElementById('firstNameErrorMsg')
 
-  mail.addEventListener("change", (event) => {
-     let input = event.target.value 
-    
-  if (validateInput((input),regexMail)== false)
-     {emailError.innerHTML = `format invalide`}
-    else {emailError.innerHTML = ``}
-  
+  const name = document.getElementById('lastName')
+  let regexName = /^[a-zA-Z- éè]{2,25}$/;
+  const nameError = document.getElementById('lastNameErrorMsg')
+
+  const city = document.getElementById('city')
+  let regexCity = /^[^0-9]{2,100}$/;
+  const cityError = document.getElementById('cityErrorMsg')
+
+
+  const email = document.getElementById('email')
+  let regexEmail = /^[a-zA-Z0-9-_]+@[a-zA-Z0-9-_]+.[a-z]{2,4}$/;
+  const emailError = document.getElementById('emailErrorMsg')
+
+
+  firstName.addEventListener("change", (event) => {
+    let input = event.target.value
+    if (validateInput((input), regexFirstName) == false) {
+      FirstNameError.innerHTML = `format invalide`
+    } else {
+      FirstNameError.innerHTML = ``
+    }
+  })
+
+
+  name.addEventListener("change", (event) => {
+    let input = event.target.value
+    if (validateInput((input), regexName) == false) {
+      nameError.innerHTML = `format invalide`
+    } else {
+      nameError.innerHTML = ``
+    }
+  })
+
+  city.addEventListener("change", (event) => {
+    let input = event.target.value
+    if (validateInput((input), regexCity) == false) {
+      cityError.innerHTML = `format invalide`
+    } else {
+      cityError.innerHTML = ``
+    }
+  })
+
+  email.addEventListener("change", (event) => {
+    let input = event.target.value
+    if (validateInput((input), regexEmail) == false) {
+      emailError.innerHTML = `format invalide`
+    } else {
+      emailError.innerHTML = ``
+    }
   })
 
 
