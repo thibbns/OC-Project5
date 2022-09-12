@@ -133,7 +133,123 @@ function displayCart() {
 
 
 
+        function validateInput(input, regex) {
+          if (input.match(regex)) {
+            return true
+          } else {
+            return false
+          }
+        }
 
+
+        const firstName = document.getElementById('firstName')
+        let regexFirstName = /^[a-zA-Z- éè]{2,25}$/;
+        const FirstNameError = document.getElementById('firstNameErrorMsg')
+
+        const lastName = document.getElementById('lastName')
+        let regexLastName = /^[a-zA-Z- éè]{2,25}$/;
+        const lastNameError = document.getElementById('lastNameErrorMsg')
+
+        const address = document.getElementById('address')
+
+        const city = document.getElementById('city')
+        let regexCity = /^[^0-9]{2,100}$/;
+        const cityError = document.getElementById('cityErrorMsg')
+
+
+        const email = document.getElementById('email')
+        let regexEmail = /^[a-zA-Z0-9-_]+@[a-zA-Z0-9-_]+.[a-z]{2,4}$/;
+        const emailError = document.getElementById('emailErrorMsg')
+
+
+        firstName.addEventListener("change", (event) => {
+          let input = event.target.value
+          if (validateInput((input), regexFirstName) == false) {
+            FirstNameError.innerHTML = `format invalide`
+          } else {
+            FirstNameError.innerHTML = ``
+          }
+
+        })
+
+
+        lastName.addEventListener("change", (event) => {
+          let input = event.target.value
+          if (validateInput((input), regexLastName) == false) {
+            lastNameError.innerHTML = `format invalide`
+          } else {
+            lastNameError.innerHTML = ``
+          }
+        })
+
+        city.addEventListener("change", (event) => {
+          let input = event.target.value
+          if (validateInput((input), regexCity) == false) {
+            cityError.innerHTML = `format invalide`
+          } else {
+            cityError.innerHTML = ``;
+          }
+        })
+
+
+        email.addEventListener("change", (event) => {
+          let input = event.target.value
+          if (validateInput((input), regexEmail) == false) {
+            emailError.innerHTML = `format invalide`
+          } else {
+            emailError.innerHTML = ``
+          }
+        })
+    
+
+
+
+
+        let products = [];
+
+        function getTotalityCart() {
+          return getCart().map(p => p.id);
+        }
+        products = getTotalityCart();
+
+
+
+
+
+/*
+        const order = document.getElementById("order")
+
+        order.addEventListener("submit", function () {
+*/
+
+
+          const contact = {
+            firstName: "firstName.value",
+            lastName: "lastName.value",
+            address: "address.value",
+            city: "city.value",
+            email: "email.value"
+          };
+
+          fetch("http://localhost:3000/api/products/order", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                contact,
+                products
+              })
+            })
+
+            .then((res) => {
+              res.json()
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+
+        //})
 
 
 
@@ -144,80 +260,6 @@ function displayCart() {
       });
 
   }
-
-  //REGEX
-
-
-
-
-
-  function validateInput(input, regex) {
-    if (input.match(regex)) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-
-  const firstName = document.getElementById('firstName')
-  let regexFirstName = /^[a-zA-Z- éè]{2,25}$/;
-  const FirstNameError = document.getElementById('firstNameErrorMsg')
-
-  const name = document.getElementById('lastName')
-  let regexName = /^[a-zA-Z- éè]{2,25}$/;
-  const nameError = document.getElementById('lastNameErrorMsg')
-
-  const city = document.getElementById('city')
-  let regexCity = /^[^0-9]{2,100}$/;
-  const cityError = document.getElementById('cityErrorMsg')
-
-
-  const email = document.getElementById('email')
-  let regexEmail = /^[a-zA-Z0-9-_]+@[a-zA-Z0-9-_]+.[a-z]{2,4}$/;
-  const emailError = document.getElementById('emailErrorMsg')
-
-
-  firstName.addEventListener("change", (event) => {
-    let input = event.target.value
-    if (validateInput((input), regexFirstName) == false) {
-      FirstNameError.innerHTML = `format invalide`
-    } else {
-      FirstNameError.innerHTML = ``
-    }
-  })
-
-
-  name.addEventListener("change", (event) => {
-    let input = event.target.value
-    if (validateInput((input), regexName) == false) {
-      nameError.innerHTML = `format invalide`
-    } else {
-      nameError.innerHTML = ``
-    }
-  })
-
-  city.addEventListener("change", (event) => {
-    let input = event.target.value
-    if (validateInput((input), regexCity) == false) {
-      cityError.innerHTML = `format invalide`
-    } else {
-      cityError.innerHTML = ``
-    }
-  })
-
-  email.addEventListener("change", (event) => {
-    let input = event.target.value
-    if (validateInput((input), regexEmail) == false) {
-      emailError.innerHTML = `format invalide`
-    } else {
-      emailError.innerHTML = ``
-    }
-  })
-
-
-
-
 
 
 }
