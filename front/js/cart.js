@@ -174,13 +174,16 @@ function displayCart() {
 
 
         lastName.addEventListener("change", (event) => {
-          let input = event.target.value
-          if (validateInput((input), regexLastName) == false) {
+          let inputLastName = event.target.value
+          if (validateInput((inputLastName), regexLastName) == false) {
             lastNameError.innerHTML = `format invalide`
+
           } else {
             lastNameError.innerHTML = ``
           }
         })
+
+
 
         city.addEventListener("change", (event) => {
           let input = event.target.value
@@ -200,41 +203,33 @@ function displayCart() {
             emailError.innerHTML = ``
           }
         })
-    
+
 
 
 
 
         let products = [];
-
         function getTotalityCart() {
           return getCart().map(p => p.id);
         }
         products = getTotalityCart();
 
-
-
-
-
-/*
-        const order = document.getElementById("order")
-
-        order.addEventListener("submit", function () {
-*/
-
-
+        function post(e) {
+          e.preventDefault();
           const contact = {
-            firstName: "firstName.value",
-            lastName: "lastName.value",
-            address: "address.value",
-            city: "city.value",
-            email: "email.value"
+            firstName: firstName.value,
+            lastName: lastName.value,
+            address: address.value,
+            city: city.value,
+            email: email.value
           };
 
           fetch("http://localhost:3000/api/products/order", {
+
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
               },
               body: JSON.stringify({
                 contact,
@@ -248,18 +243,13 @@ function displayCart() {
             .catch((err) => {
               console.log(err)
             })
+        }
 
-        //})
-
-
-
-
-
+        const order = document.getElementById("order");
+        order.addEventListener("submit", post)
 
 
       });
 
   }
-
-
 }
