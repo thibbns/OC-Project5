@@ -45,6 +45,7 @@ function displayCart() {
 
 
         // RECUPERATION DU LOCAL STORAGE
+
         function getCart() {
           let cart = localStorage.getItem("items");
           if (cart == null) {
@@ -52,11 +53,13 @@ function displayCart() {
           } else {
             return JSON.parse(cart);
           }
+
         }
 
         // MISE A JOUR DU LOCAL STORAGE
         function saveCart(cart) {
           localStorage.setItem("items", JSON.stringify(cart));
+          displayCart();
         }
 
         // CHANGER LA QUANTITE D'UN ARTICLE ET SUPPRESSION SI QUANTITE NULLE
@@ -102,7 +105,6 @@ function displayCart() {
           let cart = getCart();
           cart = cart.filter((p => p.id != product.id) && (p => p.color != product.color));
           saveCart(cart);
-          displayCart();
 
         }
 
@@ -110,7 +112,6 @@ function displayCart() {
         for (let i = 0; i < removeFromCart.length; i++) {
           removeFromCart[i].addEventListener("click", function () {
             removeFromStorage(items[i]);
-
           })
         }
 
@@ -126,12 +127,7 @@ function displayCart() {
         totalPrice += quantity * data.price;
         document.getElementById('totalPrice').innerHTML = totalPrice
 
-        //
-
-
-
-
-
+        // VERIFICATION DU FORMAT DES INPUTS
 
         function validateInput(input, regex) {
           if (input.match(regex)) {
@@ -172,7 +168,6 @@ function displayCart() {
 
         })
 
-
         lastName.addEventListener("change", (event) => {
           let inputLastName = event.target.value
           if (validateInput((inputLastName), regexLastName) == false) {
@@ -183,8 +178,6 @@ function displayCart() {
           }
         })
 
-
-
         city.addEventListener("change", (event) => {
           let input = event.target.value
           if (validateInput((input), regexCity) == false) {
@@ -193,7 +186,6 @@ function displayCart() {
             cityError.innerHTML = ``;
           }
         })
-
 
         email.addEventListener("change", (event) => {
           let input = event.target.value
@@ -204,52 +196,75 @@ function displayCart() {
           }
         })
 
-
-
-
-
+        // CREATION ARRAY DES PRODUITS PAR ID
         let products = [];
+
         function getTotalityCart() {
           return getCart().map(p => p.id);
         }
         products = getTotalityCart();
 
-        function post(e) {
-          e.preventDefault();
-          const contact = {
-            firstName: firstName.value,
-            lastName: lastName.value,
-            address: address.value,
-            city: city.value,
-            email: email.value
-          };
 
-          fetch("http://localhost:3000/api/products/order", {
+        // RECUPERATION DES DONNEES DU FORMULAIRE
+        const contact = {
+          firstName: firstName.value,
+          lastName: lastName.value,
+          address: address.value,
+          city: city.value,
+          email: email.value
+        };
 
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-              },
-              body: JSON.stringify({
-                contact,
-                products
-              })
-            })
 
-            .then((res) => {
-              res.json()
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-        }
-
+        // VALIDATION DE LA COMMANDE AVEC VERIFICATION DES CHAMPS DU FORMULAIRE
         const order = document.getElementById("order");
-        order.addEventListener("submit", post)
 
+        order.addEventListener('click', (e) => {
+          e.preventDefault();
 
+          if ((validateInput((firstName.value), regexFirstName) == true) &&
+            (validateInput((lastName.value), regexLastName) == true) &&
+            (validateInput((city.value), regexCity) == true) &&
+            (validateInput((email.value), regexEmail) == true)) {
+            postOrder(products, contact)
+          } else {
+            alert('Le format d\'un ou des champs saisis est incorrect')
+          }
+
+        });
       });
-
   }
+}
+
+// FONCTION POST POUR ENVOI DES DONNEES ET RECUPERATION DE L'ORDER_ID
+
+async function postOrder(products, contact) {
+
+  fetch("http://localhost:3000/api/products/order", {
+
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        contact,
+        products
+      })
+    })
+
+    .then(function (res) {
+      if (res.ok) {
+        return res.json()
+      }
+    })
+
+    .then(function (request) {
+
+      document.location.href = `./confirmation.html?id=${request.orderId}`;
+      localStorage.clear()
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+
 }
