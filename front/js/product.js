@@ -1,10 +1,8 @@
 // RECUPERATION DE L'ID DU PRODUIT SELECTIONNE
-
 let params = (new URL(document.location)).searchParams;
 let id = params.get('id');
 
 // CREATION DES VARIABLES POUR AFFICHAGE DES DONNEES DANS LE HTML
-
 const url = 'http://localhost:3000/api/products/' + id;
 const description = document.getElementById('description');
 const title = document.getElementById('title');
@@ -16,9 +14,7 @@ let quantity = document.getElementById("quantity")
 
 
 // APPEL DE L'API
-
 fetch(url)
-
   .then(function (response) {
     return response.json()
   })
@@ -56,9 +52,7 @@ function saveCart(cart) {
   localStorage.setItem("items", JSON.stringify(cart));
 }
 
-
 // AJOUT D'UN PRODUIT DANS LE LOCAL STORAGE
-
 addToCart.addEventListener("click", function () {
   let cart = getCart();
   let product = {
@@ -71,8 +65,7 @@ addToCart.addEventListener("click", function () {
   let foundProduct = cart.find((p => p.id == product.id) && (p => p.color == product.color));
   if ((color.value == "") || (quantity.value == 0)) {
     alert('Veuillez sélectionner une couleur et indiquer une quantité entre 0 et 100')
-  } else if (foundProduct != undefined) {
-  } else {
+  } else if (foundProduct != undefined) {} else {
     product.quantity = quantity.value;
     cart.push(product);
   }

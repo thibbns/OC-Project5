@@ -45,7 +45,6 @@ function displayCart() {
 
 
         // RECUPERATION DU LOCAL STORAGE
-
         function getCart() {
           let cart = localStorage.getItem("items");
           if (cart == null) {
@@ -92,11 +91,9 @@ function displayCart() {
                 id: changeId,
                 color: changeColor
               }, newQuantity)
-
             } else {
               alert('La quantité maximale est 100, Veuillez sélectionner une quantité entre 0 et 100')
             }
-
           })
         }
 
@@ -105,7 +102,6 @@ function displayCart() {
           let cart = getCart();
           cart = cart.filter((p => p.id != product.id) && (p => p.color != product.color));
           saveCart(cart);
-
         }
 
         const removeFromCart = document.getElementsByClassName('deleteItem');
@@ -123,12 +119,10 @@ function displayCart() {
         }
 
         // CALCUL DU PRIX TOTAL
-
         totalPrice += quantity * data.price;
         document.getElementById('totalPrice').innerHTML = totalPrice
 
         // VERIFICATION DU FORMAT DES INPUTS
-
         function validateInput(input, regex) {
           if (input.match(regex)) {
             return true
@@ -136,7 +130,6 @@ function displayCart() {
             return false
           }
         }
-
 
         const firstName = document.getElementById('firstName')
         let regexFirstName = /^[a-zA-Z- éè]{2,25}$/;
@@ -165,14 +158,12 @@ function displayCart() {
           } else {
             FirstNameError.innerHTML = ``
           }
-
         })
 
         lastName.addEventListener("change", (event) => {
           let inputLastName = event.target.value
           if (validateInput((inputLastName), regexLastName) == false) {
             lastNameError.innerHTML = `format invalide`
-
           } else {
             lastNameError.innerHTML = ``
           }
@@ -204,23 +195,22 @@ function displayCart() {
         }
         products = getTotalityCart();
 
-
-        // RECUPERATION DES DONNEES DU FORMULAIRE
-        const contact = {
-          firstName: firstName.value,
-          lastName: lastName.value,
-          address: address.value,
-          city: city.value,
-          email: email.value
-        };
-
-
         // VALIDATION DE LA COMMANDE AVEC VERIFICATION DES CHAMPS DU FORMULAIRE
         const order = document.getElementById("order");
-
         order.addEventListener('click', (e) => {
+          const firstName = document.getElementById('firstName')
+          const lastName = document.getElementById('lastName')
+          const address = document.getElementById('address')
+          const city = document.getElementById('city')
+          const email = document.getElementById('email')
+          const contact = {
+            firstName: firstName.value,
+            lastName: lastName.value,
+            address: address.value,
+            city: city.value,
+            email: email.value
+          };
           e.preventDefault();
-
           if ((validateInput((firstName.value), regexFirstName) == true) &&
             (validateInput((lastName.value), regexLastName) == true) &&
             (validateInput((city.value), regexCity) == true) &&
@@ -229,18 +219,14 @@ function displayCart() {
           } else {
             alert('Le format d\'un ou des champs saisis est incorrect')
           }
-
         });
       });
   }
 }
 
 // FONCTION POST POUR ENVOI DES DONNEES ET RECUPERATION DE L'ORDER_ID
-
 async function postOrder(products, contact) {
-
   fetch("http://localhost:3000/api/products/order", {
-
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -255,14 +241,16 @@ async function postOrder(products, contact) {
     .then(function (res) {
       if (res.ok) {
         return res.json()
+      } else {
+        console.log(res)
       }
     })
 
-    .then(function (request) {
-
-      document.location.href = `./confirmation.html?id=${request.orderId}`;
+    .then(function (data) {
+      document.location.href = `./confirmation.html?id=${data.orderId}`;
       localStorage.clear()
     })
+
     .catch((err) => {
       console.log(err)
     })
