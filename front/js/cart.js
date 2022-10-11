@@ -43,39 +43,8 @@ function displayCart() {
       </div>
   </article>`
 
-
-        // RECUPERATION DU LOCAL STORAGE
-        function getCart() {
-          let cart = localStorage.getItem("items");
-          if (cart == null) {
-            return [];
-          } else {
-            return JSON.parse(cart);
-          }
-
-        }
-
-        // MISE A JOUR DU LOCAL STORAGE
-        function saveCart(cart) {
-          localStorage.setItem("items", JSON.stringify(cart));
-          displayCart();
-        }
-
-        // CHANGER LA QUANTITE D'UN ARTICLE ET SUPPRESSION SI QUANTITE NULLE
-        function changeQuantity(product, quantity) {
-          let cart = getCart();
-          let foundProduct = cart.find((p => p.id == product.id) && (p => p.color == product.color));
-          if (foundProduct != undefined) {
-            let foundProductQuantityNumber = Number(foundProduct.quantity)
-            foundProductQuantityNumber = quantity;
-            foundProduct.quantity = foundProductQuantityNumber
-            if (foundProduct.quantity <= 0) {
-              removeFromStorage(foundProduct)
-            } else {
-              saveCart(cart)
-            }
-          }
-        }
+        totalPriceCart(quantity, data.price);
+        totalQuantityCart(items);
 
 
         const selectElement = document.querySelectorAll('article');
@@ -97,12 +66,7 @@ function displayCart() {
           })
         }
 
-        //SUPPRIMER UN ARTICLE
-        function removeFromStorage(product) {
-          let cart = getCart();
-          cart = cart.filter((p => p.id != product.id) && (p => p.color != product.color));
-          saveCart(cart);
-        }
+
 
         const removeFromCart = document.getElementsByClassName('deleteItem');
         for (let i = 0; i < removeFromCart.length; i++) {
@@ -111,31 +75,7 @@ function displayCart() {
           })
         }
 
-        // CALCUL QUANTITE TOTALE
-        function totalQuantityCart() {
-          let totalQuantity = 0;
-          for (i = 0; i < items.length; i++) {
-            totalQuantity += Number(items[i].quantity);
-            document.getElementById('totalQuantity').innerHTML = totalQuantity
-          }
-        }
-        totalQuantityCart();
 
-        // CALCUL DU PRIX TOTAL
-        function totalPriceCart() {
-          totalPrice += quantity * data.price;
-          document.getElementById('totalPrice').innerHTML = totalPrice
-        }
-        totalPriceCart();
-
-        // VERIFICATION DU FORMAT DES INPUTS
-        function validateInput(input, regex) {
-          if (input.match(regex)) {
-            return true
-          } else {
-            return false
-          }
-        }
 
         const firstName = document.getElementById('firstName');
         let regexFirstName = /^[a-zA-Z- éè]{2,25}$/;
@@ -144,6 +84,7 @@ function displayCart() {
         const lastName = document.getElementById('lastName');
         let regexLastName = /^[a-zA-Z- éè]{2,25}$/;
         const lastNameError = document.getElementById('lastNameErrorMsg');
+        verifyLastName(lastName, regexLastName, lastNameError);
 
         const city = document.getElementById('city');
         let regexCity = /^[^0-9]{2,100}$/;
@@ -160,15 +101,6 @@ function displayCart() {
             FirstNameError.innerHTML = `format invalide`
           } else {
             FirstNameError.innerHTML = ``
-          }
-        })
-
-        lastName.addEventListener("change", (event) => {
-          let inputLastName = event.target.value;
-          if (validateInput((inputLastName), regexLastName) == false) {
-            lastNameError.innerHTML = `format invalide`
-          } else {
-            lastNameError.innerHTML = ``
           }
         })
 
@@ -190,13 +122,6 @@ function displayCart() {
           }
         })
 
-        // CREATION ARRAY DES PRODUITS PAR ID
-        let products = [];
-
-        function getTotalityCart() {
-          return getCart().map(p => p.id);
-        }
-        products = getTotalityCart();
 
         // VALIDATION DE LA COMMANDE AVEC VERIFICATION DES CHAMPS DU FORMULAIRE
         const order = document.getElementById("order");
@@ -228,7 +153,92 @@ function displayCart() {
         });
       });
   }
+
 }
+
+
+// RECUPERATION DU LOCAL STORAGE
+function getCart() {
+  let cart = localStorage.getItem("items");
+  if (cart == null) {
+    return [];
+  } else {
+    return JSON.parse(cart);
+  }
+}
+
+// MISE A JOUR DU LOCAL STORAGE
+function saveCart(cart) {
+  localStorage.setItem("items", JSON.stringify(cart));
+  displayCart();
+}
+
+// CHANGER LA QUANTITE D'UN ARTICLE ET SUPPRESSION SI QUANTITE NULLE
+function changeQuantity(product, quantity) {
+  let cart = getCart();
+  let foundProduct = cart.find((p => p.id == product.id) && (p => p.color == product.color));
+  if (foundProduct != undefined) {
+    let foundProductQuantityNumber = Number(foundProduct.quantity)
+    foundProductQuantityNumber = quantity;
+    foundProduct.quantity = foundProductQuantityNumber
+    if (foundProduct.quantity <= 0) {
+      removeFromStorage(foundProduct)
+    } else {
+      saveCart(cart)
+    }
+  }
+}
+
+//SUPPRIMER UN ARTICLE
+function removeFromStorage(product) {
+  let cart = getCart();
+  cart = cart.filter((p => p.id != product.id) && (p => p.color != product.color));
+  saveCart(cart);
+}
+
+// CALCUL QUANTITE TOTALE
+function totalQuantityCart(items) {
+  let totalQuantity = 0;
+  for (i = 0; i < items.length; i++) {
+    totalQuantity += Number(items[i].quantity);
+    document.getElementById('totalQuantity').innerHTML = totalQuantity
+  }
+}
+
+// CALCUL DU PRIX TOTAL
+function totalPriceCart(quantity, price) {
+  totalPrice += quantity * price;
+  document.getElementById('totalPrice').innerHTML = totalPrice
+}
+
+// VERIFICATION DU FORMAT DES INPUTS
+function validateInput(input, regex) {
+  if (input.match(regex)) {
+    return true
+  } else {
+    return false
+  }
+}
+
+function verifyLastName(lastName, regexLastName, lastNameError) {
+  lastName.addEventListener("change", (event) => {
+    let inputLastName = event.target.value;
+    if (validateInput((inputLastName), regexLastName) == false) {
+      lastNameError.innerHTML = `format invalide`
+    } else {
+      lastNameError.innerHTML = ``
+    }
+  })
+}
+
+// CREATION ARRAY DES PRODUITS PAR ID
+let products = [];
+
+function getTotalityCart() {
+  return getCart().map(p => p.id);
+}
+products = getTotalityCart();
+
 
 // FONCTION POST POUR ENVOI DES DONNEES ET RECUPERATION DE L'ORDER_ID
 async function postOrder(products, contact) {
@@ -260,5 +270,4 @@ async function postOrder(products, contact) {
     .catch((err) => {
       console.log(err)
     })
-
 }
