@@ -15,17 +15,17 @@ let quantity = document.getElementById("quantity")
 
 // APPEL DE L'API
 fetch(url)
-  .then(function (response) {
-    return response.json()
+  .then(function (res) {
+    return res.json()
   })
 
-  // AFFICHAGE DU PRODUIT SELECTIONNE VIA L'API DANS LE HTML
+// AFFICHAGE DU PRODUIT SELECTIONNE VIA L'API DANS LE HTML
   .then(function (item) {
     function showItem(item) {
       title.innerHTML = item.name;
       description.innerHTML = item.description;
       price.innerHTML = item.price;
-      img[0].innerHTML = `<img src=${item.imageUrl} >`;
+      img[0].innerHTML = `<img src=${item.imageUrl} alt="${item.altTxt}">`;
       for (i = 0; i < item.colors.length; i++) {
         color.innerHTML += `<option value="${item.colors[i]}" >${item.colors[i]}</option>`
       }

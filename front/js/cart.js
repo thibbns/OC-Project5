@@ -3,8 +3,14 @@ displayCart();
 function displayCart() {
   let items = JSON.parse(localStorage.getItem("items"));
   const cartItems = document.getElementById('cart__items');
+  const totalQuantity = document.getElementById('totalQuantity');
+  const totalPrice = document.getElementById('totalPrice');
+  
+  totalPrice.innerHTML = 0;
+  totalQuantity.innerHTML = 0;
   cartItems.innerHTML = "";
-  totalPrice = 0;
+  totalPriceMultipliedByQuantity = 0;
+
 
   for (i = 0; i < items.length; i++) {
     let id = items[i].id
@@ -198,17 +204,17 @@ function removeFromStorage(product) {
 
 // CALCUL QUANTITE TOTALE
 function totalQuantityCart(items) {
-  let totalQuantity = 0;
+  let totalQuantityNumber = 0;
   for (i = 0; i < items.length; i++) {
-    totalQuantity += Number(items[i].quantity);
-    document.getElementById('totalQuantity').innerHTML = totalQuantity
+    totalQuantityNumber += Number(items[i].quantity);
+    totalQuantity.innerHTML = totalQuantityNumber;
   }
 }
 
 // CALCUL DU PRIX TOTAL
 function totalPriceCart(quantity, price) {
-  totalPrice += quantity * price;
-  document.getElementById('totalPrice').innerHTML = totalPrice
+  totalPriceMultipliedByQuantity += quantity * price;
+  totalPrice.innerHTML = totalPriceMultipliedByQuantity;
 }
 
 // VERIFICATION DU FORMAT DES INPUTS
