@@ -5,7 +5,8 @@ function displayCart() {
   const cartItems = document.getElementById('cart__items');
   const totalQuantity = document.getElementById('totalQuantity');
   const totalPrice = document.getElementById('totalPrice');
-  
+
+  // INITIALISATION DES VARIABLES
   totalPrice.innerHTML = 0;
   totalQuantity.innerHTML = 0;
   cartItems.innerHTML = "";
@@ -20,8 +21,8 @@ function displayCart() {
     const url = 'http://localhost:3000/api/products/' + id;
     fetch(url)
 
-      .then(function (response) {
-        return response.json()
+      .then(function (res) {
+        return res.json()
       })
 
       .then(function (data) {
@@ -52,11 +53,10 @@ function displayCart() {
         totalPriceCart(quantity, data.price);
         totalQuantityCart(items);
 
-
+        // CHANGEMENT DE LA QUANTITE D'UN PRODUIT
         const selectElement = document.querySelectorAll('article');
         for (let i = 0; i < selectElement.length; i++) {
           selectElement[i].addEventListener('change', (event) => {
-
             let newQuantity = Number(event.target.value)
             const closest = selectElement[i].closest('article')
             let changeId = closest.dataset.id
@@ -73,7 +73,7 @@ function displayCart() {
         }
 
 
-
+        // SUPPRESSION D'UN ARTICLE DU PANIER
         const removeFromCart = document.getElementsByClassName('deleteItem');
         for (let i = 0; i < removeFromCart.length; i++) {
           removeFromCart[i].addEventListener("click", function () {
@@ -82,10 +82,11 @@ function displayCart() {
         }
 
 
-
+        // VERIFICATION DU FORMAT DES CHAMPS COMPLETES
         const firstName = document.getElementById('firstName');
         let regexFirstName = /^[a-zA-Z- éè]{2,25}$/;
-        const FirstNameError = document.getElementById('firstNameErrorMsg');
+        const firstNameError = document.getElementById('firstNameErrorMsg');
+        verifyFirstName(firstName, regexFirstName, firstNameError);
 
         const lastName = document.getElementById('lastName');
         let regexLastName = /^[a-zA-Z- éè]{2,25}$/;
@@ -95,38 +96,12 @@ function displayCart() {
         const city = document.getElementById('city');
         let regexCity = /^[^0-9]{2,100}$/;
         const cityError = document.getElementById('cityErrorMsg');
+        verifyCity(city, regexCity, cityError);
 
         const email = document.getElementById('email');
         let regexEmail = /^[a-zA-Z0-9-_]+@[a-zA-Z0-9-_]+.[a-z]{2,4}$/;
         const emailError = document.getElementById('emailErrorMsg');
-
-
-        firstName.addEventListener("change", (event) => {
-          let input = event.target.value;
-          if (validateInput((input), regexFirstName) == false) {
-            FirstNameError.innerHTML = `format invalide`
-          } else {
-            FirstNameError.innerHTML = ``
-          }
-        })
-
-        city.addEventListener("change", (event) => {
-          let input = event.target.value;
-          if (validateInput((input), regexCity) == false) {
-            cityError.innerHTML = `format invalide`
-          } else {
-            cityError.innerHTML = ``;
-          }
-        })
-
-        email.addEventListener("change", (event) => {
-          let input = event.target.value;
-          if (validateInput((input), regexEmail) == false) {
-            emailError.innerHTML = `format invalide`
-          } else {
-            emailError.innerHTML = ``
-          }
-        })
+        verifyEmail(email, regexEmail, emailError);
 
 
         // VALIDATION DE LA COMMANDE AVEC VERIFICATION DES CHAMPS DU FORMULAIRE
@@ -137,7 +112,6 @@ function displayCart() {
           const address = document.getElementById('address');
           const city = document.getElementById('city');
           const email = document.getElementById('email');
-
           const contact = {
             firstName: firstName.value,
             lastName: lastName.value,
@@ -145,9 +119,7 @@ function displayCart() {
             city: city.value,
             email: email.value
           };
-
           e.preventDefault();
-
           if ((validateInput((firstName.value), regexFirstName) == true) &&
             (validateInput((lastName.value), regexLastName) == true) &&
             (validateInput((city.value), regexCity) == true) &&
@@ -159,7 +131,6 @@ function displayCart() {
         });
       });
   }
-
 }
 
 
@@ -226,6 +197,19 @@ function validateInput(input, regex) {
   }
 }
 
+
+// FONCTIONS DE VERIFICATION DES CHAMPS ET AFFICHAGE SI FORMAT INVALIDE
+function verifyFirstName(firstName, regexFirstName, firstNameError) {
+  firstName.addEventListener("change", (event) => {
+    let input = event.target.value;
+    if (validateInput((input), regexFirstName) == false) {
+      firstNameError.innerHTML = `format invalide`
+    } else {
+      firstNameError.innerHTML = ``
+    }
+  })
+}
+
 function verifyLastName(lastName, regexLastName, lastNameError) {
   lastName.addEventListener("change", (event) => {
     let inputLastName = event.target.value;
@@ -236,6 +220,29 @@ function verifyLastName(lastName, regexLastName, lastNameError) {
     }
   })
 }
+
+function verifyCity(city, regexCity, cityError) {
+  city.addEventListener("change", (event) => {
+    let input = event.target.value;
+    if (validateInput((input), regexCity) == false) {
+      cityError.innerHTML = `format invalide`
+    } else {
+      cityError.innerHTML = ``;
+    }
+  })
+}
+
+function verifyEmail(email, regexEmail, emailError) {
+  email.addEventListener("change", (event) => {
+    let input = event.target.value;
+    if (validateInput((input), regexEmail) == false) {
+      emailError.innerHTML = `format invalide`
+    } else {
+      emailError.innerHTML = ``
+    }
+  })
+}
+
 
 // CREATION ARRAY DES PRODUITS PAR ID
 let products = [];
@@ -248,6 +255,7 @@ products = getTotalityCart();
 
 // FONCTION POST POUR ENVOI DES DONNEES ET RECUPERATION DE L'ORDER_ID
 async function postOrder(products, contact) {
+
   fetch("http://localhost:3000/api/products/order", {
       method: "POST",
       headers: {
@@ -258,6 +266,8 @@ async function postOrder(products, contact) {
         contact,
         products
       })
+
+
     })
 
     .then(function (res) {
@@ -271,9 +281,12 @@ async function postOrder(products, contact) {
     .then(function (data) {
       document.location.href = `./confirmation.html?id=${data.orderId}`;
       localStorage.clear()
+
     })
 
     .catch((err) => {
       console.log(err)
     })
+
+
 }
