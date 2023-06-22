@@ -53,6 +53,8 @@ function saveCart(cart) {
 }
 
 // AJOUT D'UN PRODUIT DANS LE LOCAL STORAGE
+
+function addProductInCart (){
 addToCart.addEventListener("click", function () {
   let cart = getCart();
   let product = {
@@ -71,3 +73,6 @@ addToCart.addEventListener("click", function () {
   }
   saveCart(cart);
 });
+}
+
+addProductInCart();

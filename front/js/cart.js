@@ -50,85 +50,13 @@ function displayCart() {
       </div>
   </article>`
 
-        totalPriceCart(quantity, data.price);
+        changeQuantityInCart();
+        removeProductFromCart(items);
         totalQuantityCart(items);
-
-        // CHANGEMENT DE LA QUANTITE D'UN PRODUIT
-        const selectElement = document.querySelectorAll('article');
-        for (let i = 0; i < selectElement.length; i++) {
-          selectElement[i].addEventListener('change', (event) => {
-            let newQuantity = Number(event.target.value)
-            const closest = selectElement[i].closest('article')
-            let changeId = closest.dataset.id
-            let changeColor = closest.dataset.color
-            if (newQuantity < 100) {
-              changeQuantity({
-                id: changeId,
-                color: changeColor
-              }, newQuantity)
-            } else {
-              alert('La quantité maximale est 100, Veuillez sélectionner une quantité entre 0 et 100')
-            }
-          })
-        }
+        totalPriceCart(quantity, data.price);
+        verifyInputs();
 
 
-        // SUPPRESSION D'UN ARTICLE DU PANIER
-        const removeFromCart = document.getElementsByClassName('deleteItem');
-        for (let i = 0; i < removeFromCart.length; i++) {
-          removeFromCart[i].addEventListener("click", function () {
-            removeFromStorage(items[i]);
-          })
-        }
-
-
-        // VERIFICATION DU FORMAT DES CHAMPS COMPLETES
-        const firstName = document.getElementById('firstName');
-        let regexFirstName = /^[a-zA-Z- éè]{2,25}$/;
-        const firstNameError = document.getElementById('firstNameErrorMsg');
-        verifyFirstName(firstName, regexFirstName, firstNameError);
-
-        const lastName = document.getElementById('lastName');
-        let regexLastName = /^[a-zA-Z- éè]{2,25}$/;
-        const lastNameError = document.getElementById('lastNameErrorMsg');
-        verifyLastName(lastName, regexLastName, lastNameError);
-
-        const city = document.getElementById('city');
-        let regexCity = /^[^0-9]{2,100}$/;
-        const cityError = document.getElementById('cityErrorMsg');
-        verifyCity(city, regexCity, cityError);
-
-        const email = document.getElementById('email');
-        let regexEmail = /^[a-zA-Z0-9-_]+@[a-zA-Z0-9-_]+.[a-z]{2,4}$/;
-        const emailError = document.getElementById('emailErrorMsg');
-        verifyEmail(email, regexEmail, emailError);
-
-
-        // VALIDATION DE LA COMMANDE AVEC VERIFICATION DES CHAMPS DU FORMULAIRE
-        const order = document.getElementById("order");
-        order.addEventListener('click', (e) => {
-          const firstName = document.getElementById('firstName');
-          const lastName = document.getElementById('lastName');
-          const address = document.getElementById('address');
-          const city = document.getElementById('city');
-          const email = document.getElementById('email');
-          const contact = {
-            firstName: firstName.value,
-            lastName: lastName.value,
-            address: address.value,
-            city: city.value,
-            email: email.value
-          };
-          e.preventDefault();
-          if ((validateInput((firstName.value), regexFirstName) == true) &&
-            (validateInput((lastName.value), regexLastName) == true) &&
-            (validateInput((city.value), regexCity) == true) &&
-            (validateInput((email.value), regexEmail) == true)) {
-            postOrder(products, contact)
-          } else {
-            alert('Le format d\'un ou des champs saisis est incorrect')
-          }
-        });
       });
   }
 }
@@ -144,13 +72,15 @@ function getCart() {
   }
 }
 
+
 // MISE A JOUR DU LOCAL STORAGE
 function saveCart(cart) {
   localStorage.setItem("items", JSON.stringify(cart));
   displayCart();
 }
 
-// CHANGER LA QUANTITE D'UN ARTICLE ET SUPPRESSION SI QUANTITE NULLE
+
+// LOCAL STORAGE --> CHANGER LA QUANTITE D'UN ARTICLE ET SUPPRESSION SI QUANTITE NULLE
 function changeQuantity(product, quantity) {
   let cart = getCart();
   let foundProduct = cart.find((p => p.id == product.id) && (p => p.color == product.color));
@@ -166,12 +96,47 @@ function changeQuantity(product, quantity) {
   }
 }
 
-//SUPPRIMER UN ARTICLE
+
+// AFFICHAGE SUR LA PAGE --> CHANGEMENT DE LA QUANTITE D'UN PRODUIT
+function changeQuantityInCart() {
+  const selectElement = document.querySelectorAll('article');
+  for (let i = 0; i < selectElement.length; i++) {
+    selectElement[i].addEventListener('change', (event) => {
+      let newQuantity = Number(event.target.value)
+      const closest = selectElement[i].closest('article')
+      let changeId = closest.dataset.id
+      let changeColor = closest.dataset.color
+      if (newQuantity < 100) {
+        changeQuantity({
+          id: changeId,
+          color: changeColor
+        }, newQuantity)
+      } else {
+        alert('La quantité maximale est 100, Veuillez sélectionner une quantité entre 0 et 100')
+      }
+    })
+  }
+}
+
+
+//SUPPRIMER UN ARTICLE DU LOCAL STORAGE
 function removeFromStorage(product) {
   let cart = getCart();
   cart = cart.filter((p => p.id != product.id) && (p => p.color != product.color));
   saveCart(cart);
 }
+
+
+// SUPPRESSION D'UN ARTICLE DU PANIER
+function removeProductFromCart(items) {
+  const removeFromCart = document.getElementsByClassName('deleteItem');
+  for (let i = 0; i < removeFromCart.length; i++) {
+    removeFromCart[i].addEventListener("click", function () {
+      removeFromStorage(items[i]);
+    })
+  }
+}
+
 
 // CALCUL QUANTITE TOTALE
 function totalQuantityCart(items) {
@@ -182,11 +147,13 @@ function totalQuantityCart(items) {
   }
 }
 
+
 // CALCUL DU PRIX TOTAL
 function totalPriceCart(quantity, price) {
   totalPriceMultipliedByQuantity += quantity * price;
   totalPrice.innerHTML = totalPriceMultipliedByQuantity;
 }
+
 
 // VERIFICATION DU FORMAT DES INPUTS
 function validateInput(input, regex) {
@@ -244,6 +211,28 @@ function verifyEmail(email, regexEmail, emailError) {
 }
 
 
+// VERIFICATION DU FORMAT DES CHAMPS COMPLETES
+const firstName = document.getElementById('firstName');
+let regexFirstName = /^[a-zA-Z- éè]{2,25}$/;
+const firstNameError = document.getElementById('firstNameErrorMsg');
+verifyFirstName(firstName, regexFirstName, firstNameError);
+
+const lastName = document.getElementById('lastName');
+let regexLastName = /^[a-zA-Z- éè]{2,25}$/;
+const lastNameError = document.getElementById('lastNameErrorMsg');
+verifyLastName(lastName, regexLastName, lastNameError);
+
+const city = document.getElementById('city');
+let regexCity = /^[^0-9]{2,100}$/;
+const cityError = document.getElementById('cityErrorMsg');
+verifyCity(city, regexCity, cityError);
+
+const email = document.getElementById('email');
+let regexEmail = /^[a-zA-Z0-9-_]+@[a-zA-Z0-9-_]+\.[a-z]{2,4}$/;
+const emailError = document.getElementById('emailErrorMsg');
+verifyEmail(email, regexEmail, emailError);
+
+
 // CREATION ARRAY DES PRODUITS PAR ID
 let products = [];
 
@@ -251,6 +240,37 @@ function getTotalityCart() {
   return getCart().map(p => p.id);
 }
 products = getTotalityCart();
+
+
+// VALIDATION DE LA COMMANDE AVEC VERIFICATION DES CHAMPS DU FORMULAIRE
+function verifyInputs() {
+  const order = document.getElementById("order");
+  order.addEventListener('click', (e) => {
+    const firstName = document.getElementById('firstName');
+    const lastName = document.getElementById('lastName');
+    const address = document.getElementById('address');
+    const city = document.getElementById('city');
+    const email = document.getElementById('email');
+    const contact = {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      address: address.value,
+      city: city.value,
+      email: email.value
+    };
+    e.preventDefault();
+    e.stopPropagation();
+
+    if ((validateInput((firstName.value), regexFirstName) == true) &&
+      (validateInput((lastName.value), regexLastName) == true) &&
+      (validateInput((city.value), regexCity) == true) &&
+      (validateInput((email.value), regexEmail) == true)) {
+      postOrder(products, contact)
+    } else {
+      console.log('Le format d\'un ou des champs saisis est incorrect')
+    }
+  });
+}
 
 
 // FONCTION POST POUR ENVOI DES DONNEES ET RECUPERATION DE L'ORDER_ID
@@ -266,8 +286,6 @@ async function postOrder(products, contact) {
         contact,
         products
       })
-
-
     })
 
     .then(function (res) {
@@ -281,12 +299,9 @@ async function postOrder(products, contact) {
     .then(function (data) {
       document.location.href = `./confirmation.html?id=${data.orderId}`;
       localStorage.clear()
-
     })
 
     .catch((err) => {
       console.log(err)
     })
-
-
 }
