@@ -53,7 +53,6 @@ function displayCart() {
         changeQuantityInCart();
         totalQuantityCart(items);
         totalPriceCart(quantity, data.price);
-        verifyInputs();
         removeFromCart();
       });
   }
@@ -77,8 +76,18 @@ function removeFromCart() {
 // SUPPRESSION D'UN ARTICLE DU LOCAL STORAGE
 function removeFromStorage(id, color) {
   let cart = getCart();
+  const initialLength = cart.length;
+
   cart = cart.filter(p => p.id !== id || p.color !== color);
   saveCart(cart);
+
+  const finalLength = cart.length;
+  if (finalLength < initialLength) {
+    alert('Le produit à bien été supprimé')
+  } else {
+    alert('Le prodduit n\'à pas pu être supprimé, veuillez réessayer')
+  }
+
 }
 
 
@@ -244,34 +253,39 @@ products = getTotalityCart();
 
 
 // VALIDATION DE LA COMMANDE AVEC VERIFICATION DES CHAMPS DU FORMULAIRE
-function verifyInputs() {
-  const order = document.getElementById("order");
-  order.addEventListener('click', (e) => {
-    const firstName = document.getElementById('firstName');
-    const lastName = document.getElementById('lastName');
-    const address = document.getElementById('address');
-    const city = document.getElementById('city');
-    const email = document.getElementById('email');
-    const contact = {
-      firstName: firstName.value,
-      lastName: lastName.value,
-      address: address.value,
-      city: city.value,
-      email: email.value
-    };
-    e.preventDefault();
-    e.stopPropagation();
+const order = document.getElementById("order");
+order.addEventListener('click', function (e) {
+  e.preventDefault();
+  e.stopPropagation();
+  verifyInputs();
+});
 
-    if ((validateInput((firstName.value), regexFirstName) == true) &&
-      (validateInput((lastName.value), regexLastName) == true) &&
-      (validateInput((city.value), regexCity) == true) &&
-      (validateInput((email.value), regexEmail) == true)) {
-      postOrder(products, contact)
-    } else {
-      alert('Le format d\'un ou des champs saisis est incorrect')
-    }
-  });
+function verifyInputs() {
+  const firstName = document.getElementById('firstName');
+  const lastName = document.getElementById('lastName');
+  const address = document.getElementById('address');
+  const city = document.getElementById('city');
+  const email = document.getElementById('email');
+  const contact = {
+    firstName: firstName.value,
+    lastName: lastName.value,
+    address: address.value,
+    city: city.value,
+    email: email.value
+  };
+
+  if ((validateInput(firstName.value, regexFirstName) == true) &&
+    (validateInput(lastName.value, regexLastName) == true) &&
+    (validateInput(city.value, regexCity) == true) &&
+    (validateInput(email.value, regexEmail) == true)) {
+    postOrder(products, contact);
+    alert('Commande validée');
+  } else {
+    alert('Un ou des champs saisis sont incorrects, veuillez corriger pour passer la commande');
+  }
 }
+
+
 
 
 // FONCTION POST POUR ENVOI DES DONNEES ET RECUPERATION DE L'ORDER_ID

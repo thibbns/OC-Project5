@@ -25,5 +25,6 @@ fetch(url)
 
   .catch(function (error) {
     console.log(error);
+    alert('Une erreur est survenue')
 
   });

@@ -19,7 +19,7 @@ fetch(url)
     return res.json()
   })
 
-// AFFICHAGE DU PRODUIT SELECTIONNE VIA L'API DANS LE HTML
+  // AFFICHAGE DU PRODUIT SELECTIONNE VIA L'API DANS LE HTML
   .then(function (item) {
     function showItem(item) {
       title.innerHTML = item.name;
@@ -35,6 +35,7 @@ fetch(url)
 
   .catch(function (error) {
     console.log(error);
+    alert('Une erreur est survenue')
   })
 
 // RECUPERATION DU LOCAL STORAGE
@@ -54,25 +55,26 @@ function saveCart(cart) {
 
 // AJOUT D'UN PRODUIT DANS LE LOCAL STORAGE
 
-function addProductInCart (){
-addToCart.addEventListener("click", function () {
-  let cart = getCart();
-  let product = {
-    "id": id,
-    "color": color.value,
-    "quantity": quantity.value
-  }
+function addProductInCart() {
+  addToCart.addEventListener("click", function () {
+    let cart = getCart();
+    let product = {
+      "id": id,
+      "color": color.value,
+      "quantity": quantity.value
+    }
 
-  // RAJOUT QUANTITE EN FONCTION DE L'ID ET DE LA COULEUR
-  let foundProduct = cart.find((p => p.id == product.id) && (p => p.color == product.color));
-  if (color.value === "" || quantity.value <= 0 || quantity.value > 100) {
-    alert('Veuillez sélectionner une couleur et indiquer une quantité entre 0 et 100')
-  } else if (foundProduct != undefined) {} else {
-    product.quantity = quantity.value;
-    cart.push(product);
-  }
-  saveCart(cart);
-});
+    // RAJOUT QUANTITE EN FONCTION DE L'ID ET DE LA COULEUR
+    let foundProduct = cart.find((p => p.id == product.id) && (p => p.color == product.color));
+    if (color.value === "" || quantity.value <= 0 || quantity.value > 100) {
+      alert('Veuillez sélectionner une couleur et indiquer une quantité entre 0 et 100')
+    } else if (foundProduct != undefined) {} else {
+      product.quantity = quantity.value;
+      cart.push(product);
+      alert('Votre canapé à bien été ajouté au panier')
+    }
+    saveCart(cart);
+  });
 }
 
 addProductInCart();
