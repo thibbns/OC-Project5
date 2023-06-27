@@ -68,10 +68,14 @@ function addProductInCart() {
     let foundProduct = cart.find((p => p.id == product.id) && (p => p.color == product.color));
     if (color.value === "" || quantity.value <= 0 || quantity.value > 100) {
       alert('Veuillez sélectionner une couleur et indiquer une quantité entre 0 et 100')
-    } else if (foundProduct != undefined) {} else {
-      product.quantity = quantity.value;
+    } else if (foundProduct != undefined) {
+      foundProduct.quantity += parseInt(quantity.value);
+      alert('La quantité a été mise à jour dans le panier');
+    } else {
+      product.quantity = parseInt(quantity.value);
       cart.push(product);
       alert('Votre canapé à bien été ajouté au panier')
+
     }
     saveCart(cart);
   });
