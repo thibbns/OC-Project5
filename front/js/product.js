@@ -66,8 +66,11 @@ function addProductInCart() {
 
     // RAJOUT QUANTITE EN FONCTION DE L'ID ET DE LA COULEUR
     let foundProduct = cart.find((p => p.id == product.id) && (p => p.color == product.color));
+    let totalQuantity = cart.reduce((total, p) => total + p.quantity, 0);
     if (color.value === "" || quantity.value <= 0 || quantity.value > 100) {
       alert('Veuillez sélectionner une couleur et indiquer une quantité entre 0 et 100')
+    } else if (totalQuantity + parseInt(quantity.value) > 100) {
+      alert('La quantité totale dans le panier ne peut pas dépasser 100');
     } else if (foundProduct != undefined) {
       foundProduct.quantity += parseInt(quantity.value);
       alert('La quantité a été mise à jour dans le panier');
